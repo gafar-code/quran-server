@@ -1,0 +1,159 @@
+openapi: 3.0.0
+
+info:
+  title: Laundry App
+  description: Documentation of the laundry API build in Go-lang
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1/
+
+components:
+  schemas:
+    Surah:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        page:
+          type: integer
+          example: 2
+        ar:
+          type: string
+          example: arabic
+        number:
+          type: integer
+          example: 12
+        tr:
+          type: string
+          example: trtr
+        idn:
+          type: string
+          example: idnnya adalah
+        type:
+          type: string
+          example: makiah
+        total_ayah:
+          type: integer
+          example: 200
+        created_at:
+          type: string
+          example: 2023
+    Ayah:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        page:
+          type: integer
+          example: 2
+        surah_number:
+          type: integer
+          example: 2
+        number:
+          type: integer
+          example: 2
+        number_in_surah:
+          type: integer
+          example: 2
+        ar:
+          type: string
+          example: arabic
+        tr:
+          type: string
+          example: trtr
+        idn:
+          type: string
+          example: idnnya adalah
+        audio_url:
+          type: string
+          example: https://
+        created_at:
+          type: string
+          example: 2023
+          
+    Page:
+      type: object
+      properties:
+        page_id:
+          type: integer
+          example: 1
+        list_ayah:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ayah'
+        list_surah:
+          type: array
+          items:
+            $ref: '#/components/schemas/Surah'            
+        
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: "Internal Server error"
+      required:
+        - code
+        - message
+
+paths:
+  # /quran:
+  #   post:
+  #     requestBody:
+  #       required: true
+  #       content: 
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             properties:
+  #               page_id:
+  #                 type: integer
+  #                 example: 1
+  #               list_ayah:
+  #                 type: array
+  #                 items:
+  #                   $ref: '#/components/schemas/Ayah'
+  #               list_surah:
+  #                 type: array
+  #                 items:
+  #                   $ref: '#/components/schemas/Surah'
+  #     responses:
+  #       "200":
+  #         description: Success
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Page'
+  
+  /quran/{page}:
+
+    get:
+      tags:
+        - "page"
+      parameters:
+        - in: path
+          name: page
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+                
+        "500":
+          description: Internal Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
